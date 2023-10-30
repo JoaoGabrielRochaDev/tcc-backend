@@ -45,7 +45,7 @@ export class Neo4jService {
     database?: string,
   ): Result {
     const session = this.getWriteSession(database);
-    console.log(session);
+
     return session.run(cypher, params);
   }
 }
