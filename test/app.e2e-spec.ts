@@ -88,6 +88,17 @@ describe('AppController (e2e)', () => {
       });
     });
     describe('GET /auth/user', () => {
+      it('shoud return unauthorized if no token is provided', () => {
+        return request(app.getHttpServer()).get('/auth/user').expect(401);
+      });
+
+      it('should return unauthorized on incorrect token', () => {
+        return request(app.getHttpServer())
+          .get('/auth/user')
+          .set('Authorization', `Bearer incorrect`)
+          .expect(401);
+      });
+
       it('should authenticate a user with the jwt token', () => {
         return request(app.getHttpServer())
           .get('/auth/user')
@@ -95,6 +106,7 @@ describe('AppController (e2e)', () => {
           .expect(200)
           .expect((res) => {
             expect(res.body.email).toBe(email);
+            expect(res.body.password).toBeUndefined();
           });
       });
     });
